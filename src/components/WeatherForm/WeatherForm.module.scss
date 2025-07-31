@@ -1,0 +1,17 @@
+@import "./../../common/style/vars";
+
+.weatherForm {
+  background-color: $second-color;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 16px;
+  padding: 18px;
+  flex: 2;
+}
+
+.weatherFormLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

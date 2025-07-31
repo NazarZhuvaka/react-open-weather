@@ -1,4 +1,5 @@
 import SelectField from "./SelectField";
+import style from "./WeatherForm.module.scss";
 
 function WeatherForm({
   selectedSpeed,
@@ -7,7 +8,7 @@ function WeatherForm({
   onTempUnitChange,
 }) {
   return (
-    <form>
+    <form className={style.weatherForm}>
       <SelectField
         label="Wind speed unit:"
         value={selectedSpeed}

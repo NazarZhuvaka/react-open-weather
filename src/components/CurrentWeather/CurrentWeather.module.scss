@@ -1,0 +1,19 @@
+@import "./../../common/style/vars";
+
+.weatherData {
+  border-radius: 16px;
+  padding: 18px;
+  background-color: $second-color;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  h1 {
+    font-size: 21px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+}
