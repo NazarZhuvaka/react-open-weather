@@ -1,34 +1,43 @@
 import SelectField from "./SelectField";
 import style from "./WeatherForm.module.scss";
 
-function WeatherForm({
-  selectedSpeed,
-  selectedTempUnit,
-  onSpeedChange,
-  onTempUnitChange,
-}) {
-  return (
-    <form className={style.weatherForm}>
-      <SelectField
-        label="Wind speed unit:"
-        value={selectedSpeed}
-        onChange={(e) => onSpeedChange(e.target.value)}
-        options={[
-          { value: "Km/h", label: "Km/h" },
-          { value: "M/s", label: "M/s" },
-        ]}
-      />
-      <SelectField
-        label="Temperature unit:"
-        value={selectedTempUnit}
-        onChange={(e) => onTempUnitChange(e.target.value)}
-        options={[
-          { value: "*C", label: "*C" },
-          { value: "*F", label: "*F" },
-        ]}
-      />
-    </form>
-  );
+import { Component } from "react";
+
+class WeatherForm extends Component {
+  onSpeedChange = (e) => {
+    this.props.onSpeedChange(e.target.value);
+  };
+
+  onTempUnitChange = (e) => {
+    this.props.onTempUnitChange(e.target.value);
+  };
+
+  render() {
+    const { selectedSpeed, selectedTempUnit } = this.props;
+
+    return (
+      <form className={style.weatherForm}>
+        <SelectField
+          label="Wind speed unit:"
+          value={selectedSpeed}
+          onChange={this.onSpeedChange}
+          options={[
+            { value: "Km/h", label: "Km/h" },
+            { value: "M/s", label: "M/s" },
+          ]}
+        />
+        <SelectField
+          label="Temperature unit:"
+          value={selectedTempUnit}
+          onChange={this.onTempUnitChange}
+          options={[
+            { value: "*C", label: "*C" },
+            { value: "*F", label: "*F" },
+          ]}
+        />
+      </form>
+    );
+  }
 }
 
-export default WeatherForm;
+export default WeatherForm

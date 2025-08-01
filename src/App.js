@@ -1,27 +1,43 @@
-import { useState } from "react";
-
 import styles from "./App.module.scss";
 import CurrentWeather from "./components/CurrentWeather";
 import WeatherForm from "./components/WeatherForm";
 
-function App() {
-  const [selectedSpeed, setSelectedSpeed] = useState("Km/h");
-  const [selectedTempUnit, setSelectedTempUnit] = useState("*C");
+import { Component } from "react";
 
-  return (
-    <main className={styles.main}>
-      <WeatherForm
-        selectedSpeed={selectedSpeed}
-        selectedTempUnit={selectedTempUnit}
-        onSpeedChange={setSelectedSpeed}
-        onTempUnitChange={setSelectedTempUnit}
-      />
-      <CurrentWeather
-        selectedSpeed={selectedSpeed}
-        selectedTempUnit={selectedTempUnit}
-      />
-    </main>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedSpeed: "Km/h",
+      selectedTempUnit: "*C",
+    };
+  }
+
+  handleSpeedChange = (selectedSpeed) => {
+    this.setState({ selectedSpeed });
+  };
+
+  handleTempUnitChange = (selectedTempUnit) => {
+    this.setState({ selectedTempUnit });
+  };
+
+  render() {
+    return (
+      <main className={styles.main}>
+        <WeatherForm
+          selectedSpeed={this.state.selectedSpeed}
+          selectedTempUnit={this.state.selectedTempUnit}
+          onSpeedChange={this.handleSpeedChange}
+          onTempUnitChange={this.handleTempUnitChange}
+        />
+        <CurrentWeather
+          selectedSpeed={this.state.selectedSpeed}
+          selectedTempUnit={this.state.selectedTempUnit}
+        />
+      </main>
+    );
+  }
 }
 
 export default App;
