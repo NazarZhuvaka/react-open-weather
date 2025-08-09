@@ -1,6 +1,5 @@
 import { FaTemperatureLow } from "react-icons/fa";
 import { LuWind } from "react-icons/lu";
-
 import { useEffect, useState } from "react";
 
 import getWeather from "../../api";
@@ -8,45 +7,73 @@ import style from "./CurrentWeather.module.scss";
 
 function CurrentWeather({ selectedSpeed, selectedTempUnit }) {
   const [weatherData, setWeatherData] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const buildQuery = () => {
     const speedUnit = selectedSpeed === "M/s" ? "ms" : "kmh";
-    const tempUnit = selectedTempUnit === "*F" ? "fahrenheit" : "celsius";
+    const tempUnit = selectedTempUnit === "°F" ? "fahrenheit" : "celsius";
     return `&wind_speed_unit=${speedUnit}&temperature_unit=${tempUnit}`;
   };
 
-  const loadWeather = () => {
-    setIsFetching(true);
-    getWeather(buildQuery())
-      .then((data) => setWeatherData(data))
-      .catch((err) => setError(err))
-      .finally(() => setIsFetching(false));
+  const loadWeather = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const data = await getWeather(buildQuery());
+      setWeatherData(data);
+    } catch (err) {
+      setError(err.message || "Failed to load weather data");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     loadWeather();
   }, [selectedSpeed, selectedTempUnit]);
 
+  if (error) {
+    return (
+      <div className={style.errorContainer}>
+        <h2>Error</h2>
+        <p>{error}</p>
+        <button onClick={loadWeather}>Try Again</button>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className={style.loadingContainer}>
+        <p>Loading weather data...</p>
+      </div>
+    );
+  }
+
+  if (!weatherData) {
+    return null;
+  }
+
   return (
-    <>
-      {error && <div>ERROR {JSON.stringify(error)}</div>}
-      {isFetching && <div>Loading, please wait ..</div>}
-      {!error && !isFetching && weatherData && (
-        <div className={style.weatherData}>
-          <h1>Current Weather</h1>
-          <div>
-            <LuWind /> {weatherData.hourly.wind_speed_10m[0]}{" "}
-            {weatherData.hourly_units.wind_speed_10m}
-          </div>
-          <div>
-            <FaTemperatureLow /> {weatherData.hourly.temperature_2m[0]}{" "}
-            {weatherData.hourly_units.temperature_2m}
-          </div>
-        </div>
-      )}
-    </>
+    <div className={style.weatherData}>
+      <h1>Current Weather</h1>
+      <div className={style.weatherItem}>
+        <LuWind className={style.icon} />
+        <span>
+          {weatherData.hourly.wind_speed_10m[0]}{" "}
+          {weatherData.hourly_units.wind_speed_10m}
+        </span>
+      </div>
+      <div className={style.weatherItem}>
+        <FaTemperatureLow className={style.icon} />
+        <span>
+          {weatherData.hourly.temperature_2m[0]}{" "}
+          {weatherData.hourly_units.temperature_2m}
+        </span>
+      </div>
+    </div>
   );
 }
 

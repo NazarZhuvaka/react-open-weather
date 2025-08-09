@@ -6,7 +6,7 @@ import WeatherForm from "./components/WeatherForm";
 
 function App() {
   const [selectedSpeed, setSelectedSpeed] = useState("Km/h");
-  const [selectedTempUnit, setSelectedTempUnit] = useState("*C");
+  const [selectedTempUnit, setSelectedTempUnit] = useState("°C");
 
   return (
     <main className={styles.main}>

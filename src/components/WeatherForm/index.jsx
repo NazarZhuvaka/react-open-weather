@@ -7,25 +7,29 @@ function WeatherForm({
   onSpeedChange,
   onTempUnitChange,
 }) {
+  const speedOptions = [
+    { value: "Km/h", label: "Km/h" },
+    { value: "M/s", label: "M/s" },
+  ];
+
+  const tempOptions = [
+    { value: "°C", label: "°C" },
+    { value: "°F", label: "°F" },
+  ];
+
   return (
     <form className={style.weatherForm}>
       <SelectField
         label="Wind speed unit:"
         value={selectedSpeed}
         onChange={(e) => onSpeedChange(e.target.value)}
-        options={[
-          { value: "Km/h", label: "Km/h" },
-          { value: "M/s", label: "M/s" },
-        ]}
+        options={speedOptions}
       />
       <SelectField
         label="Temperature unit:"
         value={selectedTempUnit}
         onChange={(e) => onTempUnitChange(e.target.value)}
-        options={[
-          { value: "*C", label: "*C" },
-          { value: "*F", label: "*F" },
-        ]}
+        options={tempOptions}
       />
     </form>
   );
