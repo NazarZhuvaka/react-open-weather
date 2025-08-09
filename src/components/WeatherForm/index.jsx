@@ -1,9 +1,18 @@
 import SelectField from "./SelectField";
 import style from "./WeatherForm.module.scss";
-
 import { Component } from "react";
 
 class WeatherForm extends Component {
+  speedOptions = [
+    { value: "Km/h", label: "Km/h" },
+    { value: "M/s", label: "M/s" },
+  ];
+
+  tempOptions = [
+    { value: "°C", label: "°C" },
+    { value: "°F", label: "°F" },
+  ];
+
   onSpeedChange = (e) => {
     this.props.onSpeedChange(e.target.value);
   };
@@ -21,23 +30,17 @@ class WeatherForm extends Component {
           label="Wind speed unit:"
           value={selectedSpeed}
           onChange={this.onSpeedChange}
-          options={[
-            { value: "Km/h", label: "Km/h" },
-            { value: "M/s", label: "M/s" },
-          ]}
+          options={this.speedOptions}
         />
         <SelectField
           label="Temperature unit:"
           value={selectedTempUnit}
           onChange={this.onTempUnitChange}
-          options={[
-            { value: "*C", label: "*C" },
-            { value: "*F", label: "*F" },
-          ]}
+          options={this.tempOptions}
         />
       </form>
     );
   }
 }
 
-export default WeatherForm
+export default WeatherForm;
