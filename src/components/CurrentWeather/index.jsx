@@ -21,7 +21,7 @@ class CurrentWeather extends Component {
     const { selectedSpeed, selectedTempUnit } = this.props;
 
     const speedUnit = selectedSpeed === "M/s" ? "ms" : "kmh";
-    const tempUnit = selectedTempUnit === "*F" ? "fahrenheit" : "celsius";
+    const tempUnit = selectedTempUnit === "°F" ? "fahrenheit" : "celsius";
     return `&wind_speed_unit=${speedUnit}&temperature_unit=${tempUnit}`;
   };
 
@@ -38,9 +38,11 @@ class CurrentWeather extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    const { selectedSpeed, selectedTempUnit } = this.props;
+
     if (
-      prevProps.selectedSpeed !== this.props.selectedSpeed ||
-      prevProps.selectedTempUnit !== this.props.selectedTempUnit
+      prevProps.selectedSpeed !== selectedSpeed ||
+      prevProps.selectedTempUnit !== selectedTempUnit
     ) {
       this.loadWeather();
     }
@@ -48,24 +50,51 @@ class CurrentWeather extends Component {
 
   render() {
     const { error, isFetching, weatherData } = this.state;
+
+    if (error) {
+      return (
+        <div className={style.errorContainer}>
+          <h2>Error</h2>
+          <p>{error.message || "Failed to load weather data"}</p>
+          <button onClick={this.loadWeather}>Try Again</button>
+        </div>
+      );
+    }
+
+    if (isFetching) {
+      return (
+        <div className={style.loadingContainer}>
+          <p>Loading weather data...</p>
+        </div>
+      );
+    }
+
+    if (!weatherData) {
+      return null;
+    }
+
+    const { hourly, hourly_units } = weatherData;
+    const windSpeed = hourly.wind_speed_10m[0];
+    const temperature = hourly.temperature_2m[0];
+    const windSpeedUnit = hourly_units.wind_speed_10m;
+    const temperatureUnit = hourly_units.temperature_2m;
+
     return (
-      <>
-        {error && <div>ERROR {JSON.stringify(error)}</div>}
-        {isFetching && <div>Loading, please wait ..</div>}
-        {!error && !isFetching && weatherData && (
-          <div className={style.weatherData}>
-            <h1>Current Weather</h1>
-            <div>
-              <LuWind /> {weatherData.hourly.wind_speed_10m[0]}{" "}
-              {weatherData.hourly_units.wind_speed_10m}
-            </div>
-            <div>
-              <FaTemperatureLow /> {weatherData.hourly.temperature_2m[0]}{" "}
-              {weatherData.hourly_units.temperature_2m}
-            </div>
-          </div>
-        )}
-      </>
+      <div className={style.weatherData}>
+        <h1>Current Weather</h1>
+        <div className={style.weatherItem}>
+          <LuWind className={style.icon} />
+          <span>
+            {windSpeed} {windSpeedUnit}
+          </span>
+        </div>
+        <div className={style.weatherItem}>
+          <FaTemperatureLow className={style.icon} />
+          <span>
+            {temperature} {temperatureUnit}
+          </span>
+        </div>
+      </div>
     );
   }
 }

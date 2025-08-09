@@ -5,9 +5,9 @@ function SelectField({ label, value, onChange, options }) {
     <label className={style.weatherFormLabel}>
       {label}
       <select value={value} onChange={onChange}>
-        {options.map(({ value, label }) => (
-          <option key={value} value={value}>
-            {label}
+        {options.map(({ value: optionValue, label: optionLabel }) => (
+          <option key={optionValue} value={optionValue}>
+            {optionLabel}
           </option>
         ))}
       </select>
